@@ -22,15 +22,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-        }
+          }
         .navbar img {
-            height: 70px;
-            margin-right: 20px;
-        }
+                height: 70px;
+                margin-right: 20px;
+            }
         .navbar h1 {
-            margin: 0;
-            font-size: 20px;
-        }
+                margin: 0;
+                font-size: 20px;
+            }
         .content {
             padding: 30px;
             padding-left: 60px;
@@ -128,6 +128,14 @@
             display: flex;
             flex-direction: column;
         }
+        .navbar-container{
+            display: flex;
+            flex-direction: row;
+            justify-content: left;
+            align-items: center;
+            width: 1116px;
+      
+          }
 
 
 
@@ -138,12 +146,14 @@
 
     <!-- Navigation Bar -->
     <div class="navbar">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="University Logo"/>
-        <div class="nav-title">
-            <h1>STUTTER CLASSIFICATION VIA FEATURE FUSION OF LOG-MEL SPECTROGRAM AND MFCC, </h1>
-        <h1>AND A 12-LAYER ENCODER WITH AN ALTERNATING FREEZE-UNFREEZE STRATEGY</h1>
+        <div class="navbar-container">
+          <img src="{{ url_for('static', filename='logo.png') }}" alt="University Logo"/>
+          <div class="nav-title">
+              <h1>STUTTER CLASSIFICATION VIA FEATURE FUSION OF LOG-MEL SPECTROGRAM AND MFCC, AND A 12-LAYER ENCODER WITH AN ALTERNATING FREEZE-UNFREEZE STRATEGY</h1>
+          </div>
         </div>
-    </div>
+          
+      </div>
 
     <!-- Body or Content -->
     <div class="content">
@@ -162,12 +172,12 @@
             
             <div class="btn-group">
                 <select name="label" id="label" required>
-                    <option value="no_stutter">No Stutter</option>
-                    <option value="word_rep">Word Repetition</option>
-                    <option value="sound_rep">Sound Repetition</option>
-                    <option value="blocks">Blocks</option>
-                    <option value="inter">Interjections</option>
-                    <option value="prolo">Prolongations</option>
+                    <option value="No Stutter">No Stutter</option>
+                    <option value="Word Repetition">Word Repetition</option>
+                    <option value="Sound Repetition">Sound Repetition</option>
+                    <option value="Blocks">Blocks</option>
+                    <option value="Interjections">Interjections</option>
+                    <option value="Prolongations">Prolongations</option>
                 </select>
                 <button type="submit">Get Results</button>
             </div>
