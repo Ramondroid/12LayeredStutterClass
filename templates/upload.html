@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Audio</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+      
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 100px;
+            font-style: normal;
         }
         .navbar {
-            background-color: #8A2BE2;
+            background-color: #AD77C4;
             padding: 15px;
             color: white;
             text-align: center;
@@ -27,18 +32,40 @@
             margin: 0;
         }
         .content {
-            padding: 20px;
+            padding: 30px;
             text-align: center;
+            background: #ECD8EB;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            justify-content: center;
+            align-items: center;
+            margin: 50px;
+            margin-left: 525px;
+            
         }
         button {
-            background-color: #8A2BE2;
+            background-color: #AD77C4;
             color: white;
             border: none;
+            border-radius: 12px;
             padding: 10px 20px;
             cursor: pointer;
+            margin-top: 6px;
         }
         button:hover {
-            background-color: #6A1B9A;
+            background-color: #6c2299;
+        }
+        h2{
+            font-size: 36px;
+        }
+        .audio{
+            padding: 20px;
+            outline: solid #C5A8D2;
+            border-radius: 5px;
+            height: 50px;
+            width: fit-content;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -66,8 +93,11 @@
 
             <br><br>
 
-            <label for="audio_file">Upload your audio file:</label>
-            <input type="file" name="audio_file" id="audio_file" accept="audio/*">
+            <div class="audio">
+                <label for="audio_file">Upload your audio file:</label>
+                <input type="file" name="audio_file" id="audio_file" accept="audio/*">
+            </div>
+            
 
             <br><br>
 
