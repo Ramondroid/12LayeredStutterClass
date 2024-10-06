@@ -1,82 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Classification Results</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .navbar {
-            background-color: #8A2BE2;
-            padding: 15px;
-            color: white;
-            text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .navbar img {
-            height: 50px;
-            margin-right: 20px;
-        }
-        .navbar h1 {
-            margin: 0;
-        }
-        .content {
-            padding: 20px;
-            text-align: center;
-        }
-        button {
-            background-color: #8A2BE2;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #6A1B9A;
-        }
-    </style>
-</head>
-<body>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Inter", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 100px;
+        font-style: normal;
+      }
+      .navbar {
+        background-color: #ad77c4;
+        padding: 15px;
+        color: white;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .navbar img {
+        height: 50px;
+        margin-right: 20px;
+      }
+      .navbar h1 {
+        margin: 0;
+      }
+      .content {
+        padding: 10px;
+        text-align: center;
+        background: #ad77c4;
+        border-radius: 8px;
+        justify-content: center;
+        align-items: center;
+        margin: 50px;
+        height: auto;
+        width: 1200px;
+        color: #ffffff;
+      }
+
+      button {
+        background-color: #ad77c4;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-top: 6px;
+      }
+      button:hover {
+        background-color: #6a1b9a;
+      }
+      .Ourmodel {
+        padding: 20px;
+        text-align: Left;
+        background: #ecd8eb;
+        border-radius: 8px;
+        margin: 50px;
+        height: 140px;
+        width: 500px;
+        
+      }
+      .Baseline {
+        padding: 20px;
+        text-align: left;
+        background: #ecd8eb;
+        border-radius: 8px;
+        margin: 50px;
+        height: 140px;
+        width: 500px;
+        
+        
+      }
+      
+      .container{
+        display:flex;
+        justify-content: center;
+      }
+      .audio-input{
+        display:flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
+  <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="University Logo">
-        <h1>STUTTER CLASSIFICATION VIA FEATURE FUSION OF LOG-MEL SPECTROGRAM AND MFCC</h1>
+      <img
+        src="{{ url_for('static', filename='logo.png') }}"
+        alt="University Logo"
+      />
+      <h1>
+        STUTTER CLASSIFICATION VIA FEATURE FUSION OF LOG-MEL SPECTROGRAM AND
+        MFCC
+      </h1>
     </div>
 
     <!-- Body or Content bhie -->
     <div class="content">
-        <h2>Actual File Label: {{ label }}</h2>
+        <div class="audio-input">
 
-        <audio controls>
-            <source src="{{ url_for('static', filename='uploads/' + filename) }}" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+            <h2>Actual File Label: {{ label }}</h2>
 
-        <br><br>
-
-        <div>
-            <h3>Log-Mel Spectrogram and MFCC, and a 12-Layer Encoder with an Alternating Freeze-Unfreeze Strategy</h3>
-            <p>Classification Result: {{ classification_result_1 }}</p>
+            <audio controls>
+                <source
+                src="{{ url_for('static', filename='uploads/' + filename) }}"
+                type="audio/mpeg"
+                />
+                Your browser does not support the audio element.
+            </audio>
         </div>
 
-        <div>
-            <h3>Log-Mel and a 6-Layer Encoder with Freeze-Unfreeze Strategy</h3>
-            <p>Classification Result: {{ classification_result_2 }}</p>
-        </div>
-
-        <br><br>
-
-        <form method="POST" action="{{ url_for('upload_again') }}">
-            <button type="submit">Upload Again</button>
-        </form>
+      <br /><br />
     </div>
 
-</body>
+    <div class="container">
+      <div class="Ourmodel">
+        <h3>
+          Log-Mel Spectrogram and MFCC, and a 12-Layer Encoder with an
+          Alternating Freeze-Unfreeze Strategy
+        </h3>
+        <p>Classification Result: {{ classification_result_1 }}</p>
+      </div>
+
+      <div class="Baseline">
+        <h3>Log-Mel and a 6-Layer Encoder with Freeze-Unfreeze Strategy</h3>
+        <p>Classification Result: {{ classification_result_2 }}</p>
+      </div>
+    </div>
+
+    <br /><br />
+
+    <form method="POST" action="{{ url_for('upload_again') }}">
+      <button type="submit">Upload Again</button>
+    </form>
+  </body>
 </html>
