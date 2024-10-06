@@ -19,91 +19,207 @@
             background-color: #AD77C4;
             padding: 15px;
             color: white;
-            text-align: center;
             display: flex;
             justify-content: center;
             align-items: center;
         }
         .navbar img {
-            height: 50px;
+            height: 70px;
             margin-right: 20px;
         }
         .navbar h1 {
             margin: 0;
+            font-size: 20px;
         }
         .content {
             padding: 30px;
+            padding-left: 60px;
+            padding-right: 60px;
             text-align: center;
             background: #ECD8EB;
-            border-radius: 8px;
+            border-radius: 20px;
             width: 100%;
             max-width: 400px;
-            justify-content: center;
-            align-items: center;
-            margin: 50px;
-            margin-left: 525px;
-            
+            margin: 50px auto;
         }
         button {
             background-color: #AD77C4;
             color: white;
             border: none;
             border-radius: 12px;
-            padding: 10px 20px;
+            padding: 10px 40px;
             cursor: pointer;
-            margin-top: 6px;
+            width: 200px;
+            height: 40px;
+            font-size: 16px;
         }
         button:hover {
             background-color: #6c2299;
         }
         h2{
-            font-size: 36px;
+            font-size: 24px;
         }
-        .audio{
-            padding: 20px;
-            outline: solid #C5A8D2;
-            border-radius: 5px;
+        .audio {
+            padding: 60px;
+            border: 2px dashed #C5A8D2;
+            border-radius: 16px;
+            height: 150px;
+            width: auto;
+            margin: 0 auto;
+            background-color: #ECD8EB;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-top: 80px;
+        }
+        .audio.dragover {
+            border-color: #6c2299;
+        }
+        .img-container {
             height: 50px;
-            width: fit-content;
-            margin-top: 10px;
+            padding: 0px;
         }
+        .audio img {
+            margin-bottom: 10px;
+            width: 50px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        select {
+            width: 200px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid #AD77C4;
+            background-color: #AD77C4;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            appearance: none;
+            text-align-last: center;
+
+        }
+        select option{
+            background-color: #AD77C4;
+        }
+        select option:hover{
+            background-color: #AD77C4;
+        }
+        select:focus{
+            border: 1px solid #AD77C4;
+            background-color: #AD77C4;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 4%;
+        }
+        .nav-title{
+            display: flex;
+            flex-direction: column;
+        }
+
+
+
+
     </style>
 </head>
 <body>
 
     <!-- Navigation Bar -->
     <div class="navbar">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="University Logo">
-        <h1>STUTTER CLASSIFICATION VIA FEATURE FUSION OF LOG-MEL SPECTROGRAM AND MFCC</h1>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="University Logo"/>
+        <div class="nav-title">
+            <h1>STUTTER CLASSIFICATION VIA FEATURE FUSION OF LOG-MEL SPECTROGRAM AND MFCC, </h1>
+        <h1>AND A 12-LAYER ENCODER WITH AN ALTERNATING FREEZE-UNFREEZE STRATEGY</h1>
+        </div>
     </div>
 
-    <!-- Body or Content bhie -->
+    <!-- Body or Content -->
     <div class="content">
         <h2>Upload an Audio File</h2>
         <form method="POST" enctype="multipart/form-data">
-            <label for="label">Select Label:</label>
-            <select name="label" id="label">
-                <option value="no_stutter">No Stutter</option>
-                <option value="word_rep">Word Repetition</option>
-                <option value="sound_rep">Sound Repetition</option>
-                <option value="blocks">Blocks</option>
-                <option value="inter">Interjections</option>
-                <option value="prolo">Prolongations</option>
-            </select>
 
-            <br><br>
-
-            <div class="audio">
-                <label for="audio_file">Upload your audio file:</label>
+            <!-- Updated audio section with drag-and-drop -->
+            <div class="audio" id="drop-area">
+                <img src="{{ url_for('static', filename='upload.png') }}" alt="Upload Icon"/>
+                <label for="audio_file">Drag and Drop File <br> or</label>
+                <br>
                 <input type="file" name="audio_file" id="audio_file" accept="audio/*">
+                <button type="button" onclick="document.getElementById('audio_file').click();">Browse</button>
+                <p id="file-name">No file uploaded</p>
             </div>
             
-
-            <br><br>
-
-            <button type="submit">Get Results</button>
+            <div class="btn-group">
+                <select name="label" id="label" required>
+                    <option value="no_stutter">No Stutter</option>
+                    <option value="word_rep">Word Repetition</option>
+                    <option value="sound_rep">Sound Repetition</option>
+                    <option value="blocks">Blocks</option>
+                    <option value="inter">Interjections</option>
+                    <option value="prolo">Prolongations</option>
+                </select>
+                <button type="submit">Get Results</button>
+            </div>
         </form>
     </div>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('audio_file');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop area on drag over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => {
+                dropArea.classList.remove('dragover');
+            }, false);
+        });
+
+        // Handle dropped files
+        dropArea.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        // Display the file name
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                fileNameDisplay.textContent = files[0].name;
+            }
+        }
+    </script>
 
 </body>
 </html>
