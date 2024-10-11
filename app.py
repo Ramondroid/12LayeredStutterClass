@@ -1,14 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for
+# Insert Proposed model here !!
+# Insert Baseline model here !!
 from werkzeug.utils import secure_filename
+# Insert Librosa for Feature or audio processing !!
 import os
 
 app = Flask(__name__)
 
-# Folder to store uploaded audio files | ang folder saan mapupunta ang uploaded file ni user!!
+# pmodel = load_pmodel('pmodel path') # proposed model
+# bmodel = load+bmodel('bmodel path') # baseline model
+
+# Folder to store uploaded audio files
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Allowed audio file types | 3 only allowed files, para hindi ma upload ang images chunenes!
+# Allowed audio file types
 ALLOWED_EXTENSIONS = {'wav', 'mp3', 'ogg'}
 
 def allowed_file(filename):
@@ -17,7 +23,7 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # Check if the post request has the audio file part | para macheck natin kung may uploadedf na ba
+        # Check if the post request has the audio file part 
         if 'audio_file' not in request.files:
             return redirect(request.url)
 
@@ -32,12 +38,25 @@ def upload_file():
     
     return render_template('upload.html')
 
+
+
 @app.route('/results', methods=['GET'])
 def display_results():
     filename = request.args.get('filename')
     label = request.args.get('label')
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
     # DITO YUNG CODE NG MODEL BOSSING !!!
+    
+    # Process Audio FIles (Feature Extraction ng model natin !)
+    audio_data, sample_rate = librosa.load(file_path, sr=None) #example
+    
+    # Prepare the audio for the model (Feature Fusion?)
+    features = extract_features_from_audio(audio_data) #example
+    
+    # Get Predictions
+    
+
     # mag eme eme muna tayo ng results
     classification_result_1 = "blockings"
     classification_result_2 = "No stutter"
