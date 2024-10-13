@@ -153,19 +153,20 @@
         <div class="content">
             <div class="audio-input">
 
-                <div class="audio-contaier">
-                    <h2>Actual File Label: {{ label }}</h2>
-                </div>
-                
-                <div class="audio-control-container">
-                    <audio id="audio-player" controls>
-                        <source
-                        src="{{ url_for('static', filename='uploads/' + filename) }}"
-                        type="audio/mpeg"
-                        />
-                        Your browser does not support the audio element.
-                    </audio>
-                </div>
+              <div class="audio-container">
+                <h2>Actual File Label: {{ label }}</h2>
+                <p>Filename: <strong>{{ filename }}</strong></p> <!-- Display the filename above playback -->
+            </div>
+            
+            <div class="audio-control-container">
+                <audio id="audio-player" controls>
+                    <source
+                    src="{{ url_for('static', filename='uploads/' + filename) }}"
+                    type="audio/mpeg"
+                    />
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
                 
             </div>
         </div>
@@ -173,16 +174,16 @@
         <div class="container">
           <div class="Ourmodel">
             <h3>
-              Log-Mel Spectrogram and MFCC, and a 12-Layer Encoder with an
-              Alternating Freeze-Unfreeze Strategy
+                Log-Mel Spectrogram and MFCC, and a 12-Layer Encoder with an
+                Alternating Freeze-Unfreeze Strategy
             </h3>
             <p>Classification Result: <div class="proposed-result">{{ classification_result_1 }}</div></p>
-          </div>
-    
-          <div class="Baseline">
+        </div>
+        
+        <div class="Baseline">
             <h3>Log-Mel and a 6-Layer Encoder with Freeze-Unfreeze Strategy</h3>
             <p>Classification Result: <div class="baseline-result">{{ classification_result_2 }}</div></p>
-          </div>
+        </div>        
         </div>
     
         <br /><br />
