@@ -49,15 +49,13 @@ def display_results():
     # DITO YUNG CODE NG MODEL BOSSING !!!
     
     # Process Audio FIles (Feature Extraction ng model natin !)
-    audio_data, sample_rate = librosa.load(file_path, sr=None) #example
+    # audio_data, sample_rate = librosa.load(file_path, sr=None) #example
     
     # Prepare the audio for the model (Feature Fusion?)
-    features = extract_features_from_audio(audio_data) #example
+    #features = extract_features_from_audio(audio_data) #example
     
     # Get Predictions
     
-
-    # mag eme eme muna tayo ng results
     classification_result_1 = "blockings"
     classification_result_2 = "No stutter"
 
