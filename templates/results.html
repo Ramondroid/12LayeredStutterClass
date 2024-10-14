@@ -32,7 +32,7 @@
             font-size: 20px;
         }
     .content {
-        padding: 20px;
+        padding: 20px 0px;
         text-align: center;
         background: #ad77c4;
         border-radius: 8px;
@@ -48,7 +48,7 @@
         background-color: #ad77c4;
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 8px;
         padding: 10px 20px;
         cursor: pointer;
         margin-top: 6px;
@@ -150,14 +150,16 @@
 
     <!-- Body or Content bhie -->
     <div class="body-container">
-        <div class="content">
+        <div class="content" style="max-width: 600px;">
           <div class="audio-input" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
             <div class="audio-container" style="text-align: center;">
               <!-- Extract the label from the filename -->
               <h1>Actual Data Label: {{ filename.split('_')[0] }}</h1>
               
               <!-- Display the filename without the label -->
-              <p>Audio File: <strong>{{ filename.split('_')[1:] | join('_') }}</strong></p>
+              <h3 style="text-align: center;">
+                Audio File: <strong>{{ filename.split('_')[1:] | join('_') }}</strong>
+              </h3>
           </div>
           </div>
             
@@ -192,7 +194,7 @@
         <br /><br />
     
         <form method="POST" action="{{ url_for('upload_again') }}" style="text-align: center;">
-          <button type="submit">Upload Again</button>
+          <button type="submit" style="max-width: 600px; margin: auto;">Upload Again</button>
         </form>
     </div>
     
