@@ -171,14 +171,6 @@
             </div>
             
             <div class="btn-group">
-                <select name="label" id="label" required>
-                    <option value="No Stutter">No Stutter</option>
-                    <option value="Word Repetition">Word Repetition</option>
-                    <option value="Sound Repetition">Sound Repetition</option>
-                    <option value="Blocks">Blocks</option>
-                    <option value="Interjections">Interjections</option>
-                    <option value="Prolongations">Prolongations</option>
-                </select>
                 <button type="submit">Get Results</button>
             </div>
         </form>
@@ -226,7 +218,8 @@
 
         function handleFiles(files) {
             if (files.length > 0) {
-                fileNameDisplay.textContent = files[0].name;
+                fileInput.files = files; 
+                fileNameDisplay.textContent = files[0].name;  
             }
         }
     </script>

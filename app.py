@@ -14,7 +14,14 @@ proposed_model = tf.keras.models.load_model(proposed_model_path)
 baseline_model = tf.keras.models.load_model(baseline_model_path)
 
 # Label map
-label_map = {0: 'block', 1: 'Interjection', 2: 'NoStutter', 3: 'prolongation', 4: 'Sound Repetition', 5: 'wordrep'}
+label_map = {
+    0: 'block',
+    1: 'Interjection',
+    2: 'NoStutter',
+    3: 'prolongation',
+    4: 'Sound Repetition',
+    5: 'wordrep'
+}
 
 # Preprocess the audio
 def preprocess_audio(audio_path, target_sr=16000, duration=3.0, n_fft=2048, hop_length=160):
@@ -61,6 +68,7 @@ def classify_stutter_baseline(audio_path):
 
 # Folder to store uploaded audio files
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Allowed audio file types
@@ -76,29 +84,39 @@ def upload_file():
             return redirect(request.url)
 
         file = request.files['audio_file']
-        label = request.form['label']
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            return redirect(url_for('display_results', filename=filename, label=label))
+            return redirect(url_for('display_results', filename=filename))
     
     return render_template('upload.html')
 
 @app.route('/results', methods=['GET'])
 def display_results():
     filename = request.args.get('filename')
-    label = request.args.get('label')
+
+    # Check if the filename is valid
+    if not filename or not allowed_file(filename):
+        return redirect(url_for('upload_file'))
+
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    # Ensure the file exists
+    if not os.path.exists(file_path):
+        return "File not found", 404
 
     # Classify the stutter type using both models
     classification_result_1 = classify_stutter_proposed(file_path)
     classification_result_2 = classify_stutter_baseline(file_path)
 
-    return render_template('results.html', filename=filename, label=label, 
-                           classification_result_1=classification_result_1, 
-                           classification_result_2=classification_result_2)
+    return render_template(
+        'results.html',
+        filename=filename, 
+        classification_result_1=classification_result_1, 
+        classification_result_2=classification_result_2
+    )
 
 @app.route('/upload_again', methods=['POST'])
 def upload_again():

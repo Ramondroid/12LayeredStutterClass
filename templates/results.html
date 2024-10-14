@@ -151,12 +151,15 @@
     <!-- Body or Content bhie -->
     <div class="body-container">
         <div class="content">
-            <div class="audio-input">
-
-              <div class="audio-container">
-                <h2>Actual File Label: {{ label }}</h2>
-                <p>Filename: <strong>{{ filename }}</strong></p> <!-- Display the filename above playback -->
-            </div>
+          <div class="audio-input" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div class="audio-container" style="text-align: center;">
+              <!-- Extract the label from the filename -->
+              <h1>Actual Data Label: {{ filename.split('_')[0] }}</h1>
+              
+              <!-- Display the filename without the label -->
+              <p>Audio File: <strong>{{ filename.split('_')[1:] | join('_') }}</strong></p>
+          </div>
+          </div>
             
             <div class="audio-control-container">
                 <audio id="audio-player" controls>
@@ -188,7 +191,7 @@
     
         <br /><br />
     
-        <form method="POST" action="{{ url_for('upload_again') }}">
+        <form method="POST" action="{{ url_for('upload_again') }}" style="text-align: center;">
           <button type="submit">Upload Again</button>
         </form>
     </div>
