@@ -134,6 +134,11 @@
       background-color: #C5A8D2;
       border-radius: 8px;
   }
+  .audio-container{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
     </style>
   </head>
   <body>
@@ -153,8 +158,9 @@
         <div class="content">
             <div class="audio-input">
 
-                <div class="audio-contaier">
+                <div class="audio-container">
                     <h2>Actual File Label: {{ label }}</h2>
+                    <h2>Audio File: <strong>{{ filename.split('_')[1:] | join('_') }}</strong></h2>
                 </div>
                 
                 <div class="audio-control-container">

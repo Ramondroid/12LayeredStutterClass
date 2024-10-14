@@ -1,17 +1,74 @@
 from flask import Flask, render_template, request, redirect, url_for
-# Insert Proposed model here !!
-# Insert Baseline model here !!
 from werkzeug.utils import secure_filename
-# Insert Librosa for Feature or audio processing !!
 import os
+import tensorflow as tf
+import numpy as np
+import librosa
 
 app = Flask(__name__)
 
-# pmodel = load_pmodel('pmodel path') # proposed model
-# bmodel = load+bmodel('bmodel path') # baseline model
+# Load both pre-trained models
+proposed_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
+baseline_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
+proposed_model = tf.keras.models.load_model(proposed_model_path)
+baseline_model = tf.keras.models.load_model(baseline_model_path)
+
+# Label map
+label_map = {
+    0: 'block',
+    1: 'Interjection',
+    2: 'NoStutter',
+    3: 'prolongation',
+    4: 'Sound Repetition',
+    5: 'wordrep'
+}
+
+# Preprocess the audio
+def preprocess_audio(audio_path, target_sr=16000, duration=3.0, n_fft=2048, hop_length=160):
+    audio, sr = librosa.load(audio_path, sr=target_sr)
+
+    if len(audio) > int(duration * target_sr):
+        audio = audio[:int(duration * target_sr)]
+    else:
+        audio = np.pad(audio, (0, max(0, int(duration * target_sr) - len(audio))), 'constant')
+
+    log_mel_spectrogram = librosa.feature.melspectrogram(
+        y=audio,
+        sr=target_sr,
+        n_mels=128,
+        fmax=8000,
+        n_fft=n_fft,
+        hop_length=hop_length
+    )
+    log_mel_spectrogram = librosa.power_to_db(log_mel_spectrogram, ref=np.max)
+
+    if log_mel_spectrogram.shape[1] != 300:
+        log_mel_spectrogram = librosa.util.fix_length(log_mel_spectrogram, size=300, axis=1)
+
+    log_mel_spectrogram = np.expand_dims(log_mel_spectrogram, axis=-1)
+    log_mel_spectrogram = np.expand_dims(log_mel_spectrogram, axis=0)
+
+    return log_mel_spectrogram
+
+# Classify the stutter type using the proposed model
+def classify_stutter_proposed(audio_path):
+    processed_audio = preprocess_audio(audio_path)
+    predictions = proposed_model.predict(processed_audio)
+    predicted_label = np.argmax(predictions, axis=-1)[0]
+    stutter_type = label_map[predicted_label]
+    return stutter_type
+
+# Classify the stutter type using the baseline model
+def classify_stutter_baseline(audio_path):
+    processed_audio = preprocess_audio(audio_path)
+    predictions = baseline_model.predict(processed_audio)
+    predicted_label = np.argmax(predictions, axis=-1)[0]
+    stutter_type = label_map[predicted_label]
+    return stutter_type
 
 # Folder to store uploaded audio files
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Allowed audio file types
@@ -23,45 +80,43 @@ def allowed_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        # Check if the post request has the audio file part 
         if 'audio_file' not in request.files:
             return redirect(request.url)
 
         file = request.files['audio_file']
-        label = request.form['label']
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
-            return redirect(url_for('display_results', filename=filename, label=label))
+            return redirect(url_for('display_results', filename=filename))
     
     return render_template('upload.html')
-
-
 
 @app.route('/results', methods=['GET'])
 def display_results():
     filename = request.args.get('filename')
-    label = request.args.get('label')
+
+    # Check if the filename is valid
+    if not filename or not allowed_file(filename):
+        return redirect(url_for('upload_file'))
+
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-    # DITO YUNG CODE NG MODEL BOSSING !!!
-    
-    # Process Audio FIles (Feature Extraction ng model natin !)
-    # audio_data, sample_rate = librosa.load(file_path, sr=None) #example
-    
-    # Prepare the audio for the model (Feature Fusion?)
-    #features = extract_features_from_audio(audio_data) #example
-    
-    # Get Predictions
-    
-    classification_result_1 = "blockings"
-    classification_result_2 = "No stutter"
+    # Ensure the file exists
+    if not os.path.exists(file_path):
+        return "File not found", 404
 
-    return render_template('results.html', filename=filename, label=label, 
-                           classification_result_1=classification_result_1, 
-                           classification_result_2=classification_result_2)
+    # Classify the stutter type using both models
+    classification_result_1 = classify_stutter_proposed(file_path)
+    classification_result_2 = classify_stutter_baseline(file_path)
+
+    return render_template(
+        'results.html',
+        filename=filename, 
+        classification_result_1=classification_result_1, 
+        classification_result_2=classification_result_2
+    )
 
 @app.route('/upload_again', methods=['POST'])
 def upload_again():
