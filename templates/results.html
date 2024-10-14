@@ -8,132 +8,142 @@
     @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
     body {
-        margin: 0;
-        padding: 0;
-        font-family: "Inter", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 100px;
-        font-style: normal;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 100px;
+      font-style: normal;
+    }
+  .navbar {
+      background-color: #AD77C4;
+      padding: 15px;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  .navbar img {
+          height: 70px;
+          margin-right: 20px;
       }
-    .navbar {
-        background-color: #AD77C4;
-        padding: 15px;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+  .navbar h1 {
+          margin: 0;
+          font-size: 20px;
       }
-    .navbar img {
-            height: 70px;
-            margin-right: 20px;
-        }
-    .navbar h1 {
-            margin: 0;
-            font-size: 20px;
-        }
-    .content {
-        padding: 20px 0px;
-        text-align: center;
-        background: #ad77c4;
-        border-radius: 8px;
-        justify-content: center;
-        align-items: center;
-        margin: 50px;
-        height: auto;
-        width: 1076px;
-        color: #ffffff;
-      }
+  .content {
+      padding: 20px;
+      text-align: center;
+      background: #ad77c4;
+      border-radius: 8px;
+      justify-content: center;
+      align-items: center;
+      margin: 50px;
+      height: auto;
+      width: 1076px;
+      color: #ffffff;
+    }
 
-    button {
-        background-color: #ad77c4;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 20px;
-        cursor: pointer;
-        margin-top: 6px;
-        width: 1116px;
-        height: auto;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        font-size: 20px;
-        font-weight: 700;
-      }
-    button:hover {
-        background-color: #6a1b9a;
-      }
-    .Ourmodel {
-        padding: 20px;
-        text-align: Left;
-        background: #ecd8eb;
-        border-radius: 8px;
-        height: 200px;
-        width: 500px;
-        
-      }
-    .Baseline {
-        padding: 20px;
-        text-align: left;
-        background: #ecd8eb;
-        border-radius: 8px;
-        height: 200px;
-        width: 500px;
-      }
-    .container{
-        display:flex;
-        justify-content: center;
-        gap: 35px;
-      }
-    .audio-input{
-        display:flex;
-        justify-content: space-between;
-      }
-    .nav-title{
-        display: flex;
-        flex-direction: column;
+  button {
+      background-color: #ad77c4;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 6px;
+      width: 1116px;
+      height: auto;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      font-size: 20px;
+      font-weight: 700;
     }
-    .body-container{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+  button:hover {
+      background-color: #6a1b9a;
     }
-    .audio-input{
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+  .Ourmodel {
+      padding: 20px;
+      text-align: Left;
+      background: #ecd8eb;
+      border-radius: 8px;
+      height: 200px;
+      width: 500px;
+      
     }
-    .audio-control-container{
-        display: flex;
-        justify-content: center;
+  .Baseline {
+      padding: 20px;
+      text-align: left;
+      background: #ecd8eb;
+      border-radius: 8px;
+      height: 200px;
+      width: 500px;
     }
-    #audio-player{
-        width: 500px;
+  .container{
+      display:flex;
+      justify-content: center;
+      gap: 35px;
     }
-    audio::-webkit-media-controls-panel{
-        background-color: #C5A8D2
-
+  .audio-input{
+      display:flex;
+      justify-content: space-between;
     }
-    .navbar-container{
+  .nav-title{
+      display: flex;
+      flex-direction: column;
+  }
+  .body-container{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+  .audio-input{
       display: flex;
       flex-direction: row;
-      justify-content: left;
       align-items: center;
-      width: 1116px;
+  }
+  .audio-control-container{
+      display: flex;
+      justify-content: center;
+  }
+  #audio-player{
+      width: 500px;
+  }
+  audio::-webkit-media-controls-panel{
+      background-color: #C5A8D2
 
-    }
-    .proposed-result{
-      padding: 30px;
-      text-align: center;
-      background-color: #C5A8D2;
-      border-radius: 8px;
   }
-  .baseline-result{
-      padding: 30px;
-      text-align: center;
-      background-color: #C5A8D2;
-      border-radius: 8px;
+  .navbar-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    width: 1116px;
+
   }
+  .proposed-result{
+    padding: 30px;
+    text-align: center;
+    background-color: #C5A8D2;
+    border-radius: 8px;
+}
+.baseline-result{
+    padding: 30px;
+    text-align: center;
+    background-color: #C5A8D2;
+    border-radius: 8px;
+}
+.audio-container{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.audio-h1{
+  height:50px
+}
+
     </style>
   </head>
   <body>
@@ -150,28 +160,22 @@
 
     <!-- Body or Content bhie -->
     <div class="body-container">
-        <div class="content" style="max-width: 600px;">
-          <div class="audio-input" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
-            <div class="audio-container" style="text-align: center;">
-              <!-- Extract the label from the filename -->
-              <h1>Actual Data Label: {{ filename.split('_')[0] }}</h1>
-              
-              <!-- Display the filename without the label -->
-              <h3 style="text-align: center;">
-                Audio File: <strong>{{ filename.split('_')[1:] | join('_') }}</strong>
-              </h3>
+        <div class="content">
+          <div class="audio-input">
+            <div class="audio-container">
+              <div class="audio-h1"><h1>Actual Data Label: {{ filename.split('_')[0] }}</h1></div>
+              <div><h2>Audio File: <strong>{{ filename.split('_')[1:] | join('_') }}</strong></h2></div>
           </div>
+          
+          <div class="audio-control-container">
+              <audio id="audio-player" controls>
+                  <source
+                  src="{{ url_for('static', filename='uploads/' + filename) }}"
+                  type="audio/mpeg"
+                  />
+                  Your browser does not support the audio element.
+              </audio>
           </div>
-            
-            <div class="audio-control-container">
-                <audio id="audio-player" controls>
-                    <source
-                    src="{{ url_for('static', filename='uploads/' + filename) }}"
-                    type="audio/mpeg"
-                    />
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
                 
             </div>
         </div>
@@ -193,8 +197,8 @@
     
         <br /><br />
     
-        <form method="POST" action="{{ url_for('upload_again') }}" style="text-align: center;">
-          <button type="submit" style="max-width: 600px; margin: auto;">Upload Again</button>
+        <form method="POST" action="{{ url_for('upload_again') }}">
+          <button type="submit">Upload Again</button>
         </form>
     </div>
     
