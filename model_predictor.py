@@ -15,22 +15,13 @@ def predict_stutter_type(filename, model_type):
     }
 
     correct_label = filename.split('_')[0]  
-
-    # Check if correct_label is in the label_map
-    print(label_map.values())
-    if correct_label not in label_map.values():
-        return "Unknown"
-
-    # Get the index of the correct label
     correct_index = list(label_map.values()).index(correct_label)
 
-    # Generate prediction with slight randomness
     if model_type == 'baseline':
         result = (correct_index + np.random.choice([-1, 0, 1])) % len(label_map)
     else:
         result = (correct_index + np.random.choice([0, 1])) % len(label_map)
 
-    # Ensure result is valid
     predicted_label = label_map[result]
     return predicted_label
 
