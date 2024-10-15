@@ -9,7 +9,7 @@ import librosa
 app = Flask(__name__)
 
 # Load both pre-trained models 
-proposed_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
+proposed_model_path = "saved_models/Proposed_model_freeze_unfreeze.keras"
 baseline_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
 proposed_model = tf.keras.models.load_model(proposed_model_path)
 baseline_model = tf.keras.models.load_model(baseline_model_path)

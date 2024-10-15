@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 
 def load_model(model_path):
     print(f"Loading model from {model_path}...")
@@ -25,7 +26,7 @@ def predict_stutter_type(filename, model_type):
     predicted_label = label_map[result]
     return predicted_label
 
-proposed_model_path = "saved_models/Proposed_model.keras"
+proposed_model_path = "saved_models/Proposed_model_freeze_unfreeze.keras"
 baseline_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
 proposed_model = load_model(proposed_model_path)
 baseline_model = load_model(baseline_model_path)
