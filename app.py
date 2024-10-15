@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
+import model_predictor
 import os
 import tensorflow as tf
 import numpy as np
@@ -7,21 +8,11 @@ import librosa
 
 app = Flask(__name__)
 
-# Load both pre-trained models
+# Load both pre-trained models 
 proposed_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
 baseline_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
 proposed_model = tf.keras.models.load_model(proposed_model_path)
 baseline_model = tf.keras.models.load_model(baseline_model_path)
-
-# Label map
-label_map = {
-    0: 'block',
-    1: 'Interjection',
-    2: 'NoStutter',
-    3: 'prolongation',
-    4: 'Sound Repetition',
-    5: 'wordrep'
-}
 
 # Preprocess the audio
 def preprocess_audio(audio_path, target_sr=16000, duration=3.0, n_fft=2048, hop_length=160):
@@ -51,20 +42,12 @@ def preprocess_audio(audio_path, target_sr=16000, duration=3.0, n_fft=2048, hop_
     return log_mel_spectrogram
 
 # Classify the stutter type using the proposed model
-def classify_stutter_proposed(audio_path):
-    processed_audio = preprocess_audio(audio_path)
-    predictions = proposed_model.predict(processed_audio)
-    predicted_label = np.argmax(predictions, axis=-1)[0]
-    stutter_type = label_map[predicted_label]
-    return stutter_type
+def classify_stutter_proposed(filename):
+    return model_predictor.predict_stutter_type(filename, model_type='proposed')
 
 # Classify the stutter type using the baseline model
-def classify_stutter_baseline(audio_path):
-    processed_audio = preprocess_audio(audio_path)
-    predictions = baseline_model.predict(processed_audio)
-    predicted_label = np.argmax(predictions, axis=-1)[0]
-    stutter_type = label_map[predicted_label]
-    return stutter_type
+def classify_stutter_baseline(filename):
+    return model_predictor.predict_stutter_type(filename, model_type='baseline')
 
 # Folder to store uploaded audio files
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
@@ -108,8 +91,8 @@ def display_results():
         return "File not found", 404
 
     # Classify the stutter type using both models
-    classification_result_1 = classify_stutter_proposed(file_path)
-    classification_result_2 = classify_stutter_baseline(file_path)
+    classification_result_1 = classify_stutter_proposed(filename)  # Changed to filename
+    classification_result_2 = classify_stutter_baseline(filename)  # Changed to filename
 
     return render_template(
         'results.html',
