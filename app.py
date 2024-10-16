@@ -5,16 +5,15 @@ import tensorflow as tf
 import numpy as np
 import librosa
 import torch
-from config import get_config
-from stutclass_model import preprocess_concat_audio, get_model, predict
+from notebooks.proposed_model.config import get_config
+from saved_models.proposed_model.stutclass_model import preprocess_concat_audio, get_model, predict
+from notebooks.baseline_model.config import get_baseline_config
+from saved_models.baseline_model.baseline_model import baseline_preprocess_concat_audio, get_transformer_model, baseline_predict
 
 app = Flask(__name__)
 
-# Load both pre-trained models
-proposed_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
-baseline_model_path = "saved_models/Baseline_model_freeze_unfreeze.keras"
-proposed_model = tf.keras.models.load_model(proposed_model_path)
-baseline_model = tf.keras.models.load_model(baseline_model_path)
+proposed_model_path = "saved_models/proposed_model/Proposed_model.pt"
+baseline_model_path = "saved_models/baseline_model/Baseline_model.pt"
 
 # Label map
 label_map = {
@@ -57,9 +56,7 @@ def preprocess_audio(audio_path, target_sr=16000, duration=3.0, n_fft=2048, hop_
 def classify_stutter_proposed(audio_path):
     config = get_config()
 
-    audio = audio_path
-
-    input = preprocess_concat_audio(audio)
+    input = preprocess_concat_audio(audio_path)
 
     input = torch.from_numpy(input).float()
     input = input.unsqueeze(0)
@@ -69,10 +66,10 @@ def classify_stutter_proposed(audio_path):
 
     model = get_model(config, input_shape, timesteps)
 
-    saved_model = 'saved_models/Proposed_model.pt'
+    saved_model = proposed_model_path
 
     print(f'Preloading model {saved_model}')
-    print(f"Audio File: {audio}")
+    print(f"Audio File: {audio_path}")
     state = torch.load(saved_model)
     model.load_state_dict(state['model_state_dict'])
 
@@ -85,11 +82,31 @@ def classify_stutter_proposed(audio_path):
 
 # Classify the stutter type using the baseline model
 def classify_stutter_baseline(audio_path):
-    processed_audio = preprocess_audio(audio_path)
-    predictions = baseline_model.predict(processed_audio)
-    predicted_label = np.argmax(predictions, axis=-1)[0]
-    stutter_type = label_map[predicted_label]
-    return stutter_type
+    config = get_baseline_config()
+
+    input = baseline_preprocess_concat_audio(audio_path)
+
+    input = torch.from_numpy(input).float()
+    input = input.unsqueeze(0)
+
+    input_shape = input.shape[-1]
+    timesteps = input.shape[1]
+
+    model = get_transformer_model(config, input_shape, timesteps)
+
+    baseline_model = baseline_model_path
+
+    print(f'Preloading model {baseline_model}')
+    print(f"Audio File: {audio_path}")
+    state = torch.load(baseline_model)
+    model.load_state_dict(state['model_state_dict'])
+
+    predicted_class, probabilities = baseline_predict(model, input)
+
+    print(f"Predicted Class: {label_map.get(predicted_class)}")
+    print(f"Probability Distribution: {probabilities}")
+
+    return label_map.get(predicted_class)
 
 # Folder to store uploaded audio files
 UPLOAD_FOLDER = os.path.join('static', 'uploads')
