@@ -4,6 +4,9 @@ import os
 import tensorflow as tf
 import numpy as np
 import librosa
+import torch
+from config import get_config
+from stutclass_model import preprocess_concat_audio, get_model, predict
 
 app = Flask(__name__)
 
@@ -15,12 +18,12 @@ baseline_model = tf.keras.models.load_model(baseline_model_path)
 
 # Label map
 label_map = {
-    0: 'block',
+    0: 'Block',
     1: 'Interjection',
-    2: 'NoStutter',
-    3: 'prolongation',
+    2: 'No Stutter',
+    3: 'Prolongation',
     4: 'Sound Repetition',
-    5: 'wordrep'
+    5: 'Word Repetition'
 }
 
 # Preprocess the audio
@@ -52,11 +55,33 @@ def preprocess_audio(audio_path, target_sr=16000, duration=3.0, n_fft=2048, hop_
 
 # Classify the stutter type using the proposed model
 def classify_stutter_proposed(audio_path):
-    processed_audio = preprocess_audio(audio_path)
-    predictions = proposed_model.predict(processed_audio)
-    predicted_label = np.argmax(predictions, axis=-1)[0]
-    stutter_type = label_map[predicted_label]
-    return stutter_type
+    config = get_config()
+
+    audio = audio_path
+
+    input = preprocess_concat_audio(audio)
+
+    input = torch.from_numpy(input).float()
+    input = input.unsqueeze(0)
+
+    input_shape = input.shape[-1]
+    timesteps = input.shape[1]
+
+    model = get_model(config, input_shape, timesteps)
+
+    saved_model = 'saved_models/Proposed_model.pt'
+
+    print(f'Preloading model {saved_model}')
+    print(f"Audio File: {audio}")
+    state = torch.load(saved_model)
+    model.load_state_dict(state['model_state_dict'])
+
+    predicted_class, probabilities = predict(model, input)
+
+    print(f"Predicted Class: {label_map.get(predicted_class)}")
+    print(f"Probability Distribution: {probabilities}")
+
+    return label_map.get(predicted_class)
 
 # Classify the stutter type using the baseline model
 def classify_stutter_baseline(audio_path):
