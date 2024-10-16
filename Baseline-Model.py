@@ -12,7 +12,7 @@ from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import confusion_matrix, classification_report
 
 # Directory where your dataset is stored
-data_directory = "C:/Users/sampl/PycharmProjects/pythonProject/DataSets/12K-Sorted/"
+data_directory = "dataset"
 sample_rate = 16000  # Required sample rate (16kHz)
 duration = 3  # Desired duration in seconds
 n_mels = 128  # Number of Mel bands
