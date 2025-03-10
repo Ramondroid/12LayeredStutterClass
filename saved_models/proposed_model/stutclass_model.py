@@ -439,7 +439,7 @@ from torch.utils.tensorboard import SummaryWriter
 from sklearn.utils import class_weight
 
 def train_model(config):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cpu"
     print(f"Using device {device}")
     if (device == "cuda"):
         print(f"Device name: {torch.cuda.get_device_name(device.index)}")

@@ -70,7 +70,7 @@ def classify_stutter_proposed(audio_path):
 
     print(f'Preloading model {saved_model}')
     print(f"Audio File: {audio_path}")
-    state = torch.load(saved_model)
+    state = torch.load(saved_model, map_location=torch.device('cpu'))
     model.load_state_dict(state['model_state_dict'])
 
     predicted_class, probabilities = predict(model, input)
@@ -98,7 +98,7 @@ def classify_stutter_baseline(audio_path):
 
     print(f'Preloading model {baseline_model}')
     print(f"Audio File: {audio_path}")
-    state = torch.load(baseline_model)
+    state = torch.load(baseline_model, map_location=torch.device('cpu'))
     model.load_state_dict(state['model_state_dict'])
 
     predicted_class, probabilities = baseline_predict(model, input)
